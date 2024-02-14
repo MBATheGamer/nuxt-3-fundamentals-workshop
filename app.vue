@@ -1,27 +1,30 @@
-<script lang="ts">
-  import { defineNuxtComponent } from '#app';
-import type { Todo } from './types';
+<script setup lang="ts">
+  import { ref, computed } from 'vue';
+  import type { Todo } from './types';
 
-  export default defineNuxtComponent({
-    data: () => ({
-      todos: [] as Todo[]
-    }),
-    methods: {
-      fetchTodos() {
-        fetch("https://jsonplaceholder.typicode.com/todos/")
-          .then(response => response.json())
-          .then(json => {
-            this.todos = json as Todo[];
-          });
-      }
-    }
-  })
+  const todos = ref<Todo[]>([]);
+
+  const completedItems = computed(() => todos.value.filter(todo => todo.completed));
+
+  const remainingItems = computed(() => todos.value.filter(todo => !todo.completed));
+
+  function fetchTodos() {
+    fetch("https://jsonplaceholder.typicode.com/todos/")
+      .then(response => response.json())
+      .then(json => {
+        todos.value = json as Todo[];
+      });
+  }
 </script>
 
 <template>
   <div>
     <h1>Todos</h1>
     <button @click="fetchTodos">Fetch todos</button>
+    <p>
+      {{ completedItems.length }} completed |
+      {{ remainingItems.length }} remaining
+    </p>
     <ul>
       <li v-for="todo in todos" :key="`todo-id-${todo.id}`">
         <input type="checkbox" :checked="todo.completed"> {{ todo.title }}
