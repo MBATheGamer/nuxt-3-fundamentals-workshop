@@ -18,14 +18,14 @@
 </script>
 
 <template>
-  <div>
-    <h1>Todos</h1>
+  <div class="section">
+    <h1 class="title">Todos</h1>
     <button @click="fetchTodos">Fetch todos</button>
     <p>
       {{ completedItems.length }} completed |
       {{ remainingItems.length }} remaining
     </p>
-    <ul :class="$style.list">
+    <ul class="list">
       <li v-for="todo in todos" :key="`todo-id-${todo.id}`">
         <input type="checkbox" :checked="todo.completed"> {{ todo.title }}
       </li>
@@ -33,8 +33,14 @@
   </div>
 </template>
 
-<style module>
+<style lang="scss">
+  @import './node_modules/bulma/bulma.sass';
+
+  $completedTodoColor: green;
+  $remainingTodoColor: red;
+
   .list {
+    color: $completedTodoColor;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
