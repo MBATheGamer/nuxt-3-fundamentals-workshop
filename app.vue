@@ -25,7 +25,7 @@
       {{ completedItems.length }} completed |
       {{ remainingItems.length }} remaining
     </p>
-    <ul class="list">
+    <ul :class="$style.list">
       <li v-for="todo in todos" :key="`todo-id-${todo.id}`">
         <input type="checkbox" :checked="todo.completed"> {{ todo.title }}
       </li>
@@ -33,7 +33,7 @@
   </div>
 </template>
 
-<style scoped>
+<style module>
   .list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
