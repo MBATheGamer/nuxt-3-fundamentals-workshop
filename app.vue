@@ -1,6 +1,6 @@
 <script lang="ts">
   import { defineNuxtComponent } from '#app';
-import type { Photo } from './types';
+  import type { Photo } from './types';
 
   export default defineNuxtComponent({
     data: () => ({
