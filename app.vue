@@ -33,7 +33,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
   .list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
