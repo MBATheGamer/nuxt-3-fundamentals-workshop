@@ -1,47 +1,42 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
-  import type { Todo } from './types';
+  import { ref, computed } from "vue";
+  import type { Photo } from "./types";
 
-  const todos = ref<Todo[]>([]);
+  const photos = ref<Photo[]>([]);
 
-  const completedItems = computed(() => todos.value.filter(todo => todo.completed));
+  const numberOfPhotos = computed(() => photos.value.length);
 
-  const remainingItems = computed(() => todos.value.filter(todo => !todo.completed));
+  const evenAlbums = computed(() => photos.value.filter(photo => photo.albumId % 2 === 0));
 
-  function fetchTodos() {
-    fetch("https://jsonplaceholder.typicode.com/todos/")
+  const oddAlbums = computed(() => photos.value.filter(photo => photo.albumId % 2 !== 0));
+
+  function fetchPhotos() {
+    fetch("https://jsonplaceholder.typicode.com/photos/")
       .then(response => response.json())
       .then(json => {
-        todos.value = json as Todo[];
+        photos.value = json as Photo[];
       });
   }
 </script>
 
 <template>
-  <div class="section">
-    <h1 class="title">Todos</h1>
-    <button @click="fetchTodos">Fetch todos</button>
-    <p>
-      {{ completedItems.length }} completed |
-      {{ remainingItems.length }} remaining
-    </p>
-    <ul class="list">
-      <li v-for="todo in todos" :key="`todo-id-${todo.id}`">
-        <input type="checkbox" :checked="todo.completed"> {{ todo.title }}
+  <div class="container">
+    <h1>Photo Gallery</h1>
+    <button @click="fetchPhotos">Fetch data</button>
+    <h2>Total photos is: {{ numberOfPhotos }}</h2>
+    <h3>({{ oddAlbums.length }} odd albums | {{ evenAlbums.length }} even albums)</h3>
+    <ul class="photo-gallary-list">
+      <li v-for="photo in photos" :key="photo.id">
+        <img :src="photo.url" :alt="photo.title">
       </li>
     </ul>
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
   @import './node_modules/bulma/bulma.sass';
-
-  $completedTodoColor: green;
-  $remainingTodoColor: red;
-
-  .list {
-    color: $completedTodoColor;
+  .photo-gallary-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 </style>
