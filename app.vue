@@ -1,32 +1,22 @@
-<script lang="ts">
-  import { defineNuxtComponent } from '#app';
-  import type { Photo } from './types';
+<script setup lang="ts">
+  import { ref, computed } from "vue";
+  import type { Photo } from "./types";
 
-  export default defineNuxtComponent({
-    data: () => ({
-      photos: [] as Photo[],
-    }),
-    computed: {
-      numberOfPhotos() {
-        return this.photos.length;
-      },
-      evenAlbums() {
-        return this.photos.filter(photo => photo.albumId % 2 === 0);
-      },
-      oddAlbums() {
-        return this.photos.filter(photo => photo.albumId % 2 !== 0);
-      }
-    },
-    methods: {
-      fetchPhotos() {
-        fetch("https://jsonplaceholder.typicode.com/photos/")
-          .then(response => response.json())
-          .then(json => {
-            this.photos = json as Photo[];
-          });
-      }
-    }
-  })
+  const photos = ref<Photo[]>([]);
+
+  const numberOfPhotos = computed(() => photos.value.length);
+
+  const evenAlbums = computed(() => photos.value.filter(photo => photo.albumId % 2 === 0));
+
+  const oddAlbums = computed(() => photos.value.filter(photo => photo.albumId % 2 !== 0));
+
+  function fetchPhotos() {
+    fetch("https://jsonplaceholder.typicode.com/photos/")
+      .then(response => response.json())
+      .then(json => {
+        photos.value = json as Photo[];
+      });
+  }
 </script>
 
 <template>
